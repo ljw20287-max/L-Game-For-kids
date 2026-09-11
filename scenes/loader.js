@@ -41,7 +41,7 @@ SCENES.loader=Object.assign({
     const s=RIG.site(ctx,{kind:'dirt',seed:333,fenceZ:9});
     const pile=mm(new THREE.SphereGeometry(1.3,16,12),flat(0xA8825A));
     pile.scale.set(1.05,.92,1.0);pile.position.set(4.6,-.15,0);pile.castShadow=true;scene.add(pile);
-    // 后面停一辆自卸卡车，横着停，车斗对着装载机；装载机掉头过来把土倒进去
+    // 后面停一辆翻斗车，横着停，车斗对着装载机；装载机掉头过来把土倒进去
     const tk=RIG.truck(Object.assign({},ctx,{root:scene}),{color:0x3E7BC6,cabX:2.1,wheelR:.5,halfZ:.95,
       frameFrom:-3.4,frameTo:3.0,axles:[{x:2.05},{x:-1.85,dual:true}]});
     {

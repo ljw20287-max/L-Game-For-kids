@@ -1,4 +1,4 @@
-/* 场景：混凝土泵车。折叠臂一节节展开，混凝土顺着管子送到高处。 */
+/* 场景：水泥泵车。折叠臂一节节展开，混凝土顺着管子送到高处。 */
 window.SCENES=window.SCENES||{};
 (function(){
 const S={leg:0,legT:0,a1:0,a1T:0,a2:0,a2T:0,a3:0,a3T:0,pump:0,pumpT:0,eng:0,
@@ -18,13 +18,13 @@ const JOB=[
 let R=null;
 
 SCENES.pumptruck=Object.assign({
-  id:'pumptruck',title:'泵车',subtitle:'拖一拖转圈 · 点零件听听',night:false,
+  id:'pumptruck',title:'水泥泵车',subtitle:'拖一拖转圈 · 点零件听听',night:false,
   fit:{w:15,h:11,ty:3.2,tyEx:3.6,rEx:1.25,cx:-1.0},cameraStart:{theta:.95,phi:1.1},
   order:['arm','pipe','pump','hopper','legs','cab','engine','body','start'],
   go:{on:'开始泵',off:'停下',stopSaid:'停下啦',stopHint:'再按一下，再泵一次！',
     done:'泵完啦！混凝土送到楼上了。',doneHintXray:'看，泵把混凝土一推一推地挤进管子。点「停下」再泵一次。',
     doneHint:'点「看里面」，看看混凝土是怎么被推上去的。'},
-  intro:{icon:'arm',name:'泵车',text:'点一点泵车的零件，听听它叫什么。按「开始泵」看长臂怎么展开送混凝土。'},
+  intro:{icon:'arm',name:'水泥泵车',text:'点一点水泥泵车的零件，听听它叫什么。按「开始泵」看长臂怎么展开送混凝土。'},
   poster:{title:'混凝土怎么送到十几层楼高',sub:'不用一桶一桶提——用泵推上去',
     summary:'折叠臂展开 + 泵一推一推 = 混凝土顺着管子直接送到浇筑的地方！',angle:{theta:.95,phi:1.1},
     keys:['arm','pump','pipe','legs','hopper']},
@@ -56,10 +56,10 @@ SCENES.pumptruck=Object.assign({
     place(tk.group,V(0,0,0),V(0,0,0));
     defPart('body',{name:'车身',outside:true,
       text:'长长的底盘，扛着折叠臂和泵。',
-      more:'泵车看着像卡车，其实底盘是特制的：轴多、梁粗，还要留出四条支腿的位置。'},[tk.group]);
+      more:'水泥泵车看着像卡车，其实底盘是特制的：轴多、梁粗，还要留出四条支腿的位置。'},[tk.group]);
     defPart('cab',{name:'驾驶室',outside:true,
       text:'司机开车过来，然后下车用遥控器操作。',
-      more:'泵车展开以后司机不在驾驶室里，而是挂着一个遥控盒站在旁边，一边看一边控制臂的位置。'},[tk.cab]);
+      more:'水泥泵车展开以后司机不在驾驶室里，而是挂着一个遥控盒站在旁边，一边看一边控制臂的位置。'},[tk.cab]);
 
     const legsG=new THREE.Group();const legs=[];
     for(const sx of [1,-1])for(const sz of [1,-1]){
@@ -70,7 +70,7 @@ SCENES.pumptruck=Object.assign({
     root.add(legsG);
     defPart('legs',{name:'支腿',outside:true,
       text:'四条腿撑得很开，臂伸出去才不会翻。',
-      more:'泵车的臂能伸出去二三十米，力矩非常大。支腿撑开后整台车的支撑面积比车身还宽，才压得住。',
+      more:'水泥泵车的臂能伸出去二三十米，力矩非常大。支腿撑开后整台车的支撑面积比车身还宽，才压得住。',
       action(){S.legUntil=now()+3000;}},[legsG]);
 
     /* 折叠臂：三节，一节挂一节 */
@@ -153,8 +153,8 @@ SCENES.pumptruck=Object.assign({
     // 启动按钮在驾驶室的仪表台上
     const sb=RIG.startBtn(ctx,tk.btnAt.x,tk.btnAt.y,tk.btnAt.z,.6);tk.cab.add(sb.group);
     defPart('start',{name:'启动按钮',isStart:true,
-      text:'按一下，泵车就开始送混凝土啦！',
-      more:'一台泵车能顶几十个人提桶，楼盖得快全靠它。'},[sb.group]);
+      text:'按一下，水泥泵车就开始送混凝土啦！',
+      more:'一台水泥泵车能顶几十个人提桶，楼盖得快全靠它。'},[sb.group]);
 
     const _w=new THREE.Vector3();
     function update(dt){

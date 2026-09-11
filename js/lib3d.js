@@ -96,8 +96,11 @@ function linearizeScene(scene){
     if(!o.isMesh)return;
     for(const m of (Array.isArray(o.material)?o.material:[o.material])){
       if(!m||seenMat.has(m))continue;seenMat.add(m);
-      if(m.color)m.color.convertSRGBToLinear();
-      if(m.emissive)m.emissive.convertSRGBToLinear();
+      if(!m.userData.srgbConverted){
+        if(m.color)m.color.convertSRGBToLinear();
+        if(m.emissive)m.emissive.convertSRGBToLinear();
+        m.userData.srgbConverted=true;
+      }
       if(m.map&&!seenMap.has(m.map)){seenMap.add(m.map);m.map.encoding=THREE.sRGBEncoding;m.map.needsUpdate=true;}
     }
     if(o.userData.baseCol)o.userData.baseCol.copy(o.material.color);

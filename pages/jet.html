@@ -5,7 +5,15 @@
 <!-- 页面住在 pages/ 里，所有相对路径一律从站点根目录算 -->
 <base href="../">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#2F8FD6">
+<meta name="description" content="给 3-6 岁孩子看的 3D 机器科普应用。">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="它怎么动">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/favicon.png">
 <title>飞机 · 它怎么动</title>
 <style>
 :root{--bg:#FFF6E5;--ink:#2B3A55;--ink-soft:#6B7A99;--card:#FFFFFF;--sky:#5BB8F5;--sky-deep:#2F8FD6;--sun:#FFB020;--sun-deep:#E08E00;--leaf:#4CC38A;--shadow:0 4px 0 rgba(43,58,85,.10),0 10px 24px rgba(43,58,85,.08)}
@@ -122,12 +130,13 @@ body.talking .tile.sel{border-color:var(--sun);background:#FFF7E6}
   </div>
 </div>
 <div class="nogl" id="nogl">这个浏览器打不开 3D 画面，换 Safari 或 Chrome 试试。</div>
-<script src="lib/three.min.js?v=1788493942"></script>
-<script src="js/lib3d.js?v=1788697758"></script>
-<script src="js/rig.js?v=1789107649"></script>
-<script src="scenes/jet.js?v=1788972096"></script>
+<script src="lib/three.min.js?v=1789106790"></script>
+<script src="js/lib3d.js?v=1789113045"></script>
+<script src="js/rig.js?v=1789114142"></script>
+<script src="scenes/jet.js?v=1789106790"></script>
 <script>window.SCENE_ID='jet';</script>
-<script src="voice/lines.js?v=1789108061"></script>
-<script src="js/app.js?v=1788920649"></script>
+<script src="voice/lines.js?v=1789115239"></script>
+<script src="js/app.js?v=1789106790"></script>
+<script src="js/pwa.js?v=1789114121"></script>
 </body>
 </html>

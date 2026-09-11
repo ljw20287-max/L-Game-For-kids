@@ -1,4 +1,4 @@
-/* 场景：自卸卡车（翻斗车）。+x 车头，后面的车厢能液压顶起来卸货。 */
+/* 场景：翻斗车。+x 车头，后面的车厢能液压顶起来卸货。 */
 window.SCENES=window.SCENES||{};
 (function(){
 const S={tip:0,tipT:0,drive:0,driveT:0,load:1,loadT:1,gate:0,gateT:0,eng:0,
@@ -17,13 +17,13 @@ const RUN=[
 let R=null;
 
 SCENES.dump=Object.assign({
-  id:'dump',title:'自卸卡车',subtitle:'拖一拖转圈 · 点零件听听',night:false,
+  id:'dump',title:'翻斗车',subtitle:'拖一拖转圈 · 点零件听听',night:false,
   fit:{w:11,h:6.5,ty:1.7,tyEx:2.8,rEx:1.28,cx:-.3},cameraStart:{theta:.95,phi:1.18},
   order:['bed','ram','gate','wheels','cab','engine','frame','start'],
   go:{on:'开始卸',off:'停下',stopSaid:'停下啦',stopHint:'再按一下，再拉一车！',
     done:'卸完啦！一车石头全倒下来了。',doneHintXray:'看，大油缸把车厢整个顶起来。点「停下」再来一次。',
     doneHint:'点「看里面」，看看车厢是怎么被顶起来的。'},
-  intro:{icon:'bed',name:'自卸卡车',text:'点一点卡车的零件，听听它叫什么。按「开始卸」看它怎么把石头倒下来。'},
+  intro:{icon:'bed',name:'翻斗车',text:'点一点翻斗车的零件，听听它叫什么。按「开始卸」看它怎么把石头倒下来。'},
   poster:{title:'一车石头怎么倒下来',sub:'不用人搬——车厢自己会翘起来',
     summary:'一根大油缸把车厢顶到 50 度，石头就自己滑下去了！',angle:{theta:.95,phi:1.15},
     keys:['bed','ram','gate','engine','wheels']},
@@ -54,7 +54,7 @@ SCENES.dump=Object.assign({
     place(tk.group,V(0,0,0),V(0,0,0));
     defPart('frame',{name:'大梁',outside:true,
       text:'两根粗钢梁扛着整个车厢。',
-      more:'自卸车的大梁比普通卡车厚得多，因为石头砸下来的时候冲击力很大。'},[tk.group]);
+      more:'翻斗车的大梁比普通卡车厚得多，因为石头砸下来的时候冲击力很大。'},[tk.group]);
     defPart('cab',{name:'驾驶室',outside:true,
       text:'司机在这里按一个键，车厢就翘起来。',
       more:'卸货时司机不用下车，驾驶室里有个手柄控制油缸。车厢顶起来之前要先确认后面没人。'},[tk.cab]);

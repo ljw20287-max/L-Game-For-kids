@@ -3,17 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2F8FD6">
+<meta name="description" content="给 3-6 岁孩子看的 3D 机器科普应用。">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="它怎么动">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/favicon.png">
 <title>它怎么动？</title>
 <style>
 :root{--bg:#FFF6E5;--bg2:#FFEFD1;--ink:#2B3A55;--ink-soft:#6B7A99;--card:#fff;--sky-deep:#2F8FD6;--sun:#FFB020;--sun-tint:#FFF1CC;--leaf-tint:#DDF7E9;--shadow:0 4px 0 rgba(43,58,85,.10),0 10px 24px rgba(43,58,85,.08)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;min-height:100vh;font-family:"PingFang SC","HarmonyOS Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);background:radial-gradient(120% 90% at 50% -10%,var(--bg2),var(--bg) 60%)}
+button{font-family:inherit;color:inherit}
 .wrap{max-width:820px;margin:0 auto;padding:22px 18px 48px}
 .hero{text-align:center;padding:14px 0 8px}
 .hero h1{margin:0;font-size:40px;font-weight:900;letter-spacing:2px;line-height:1.1}
 .hero h1 em{font-style:normal;color:var(--sky-deep)}
 .hero p{margin:10px 0 0;font-size:16px;color:var(--ink-soft);font-weight:600}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px auto 4px;padding:6px;background:rgba(255,255,255,.72);border-radius:18px;box-shadow:0 2px 0 rgba(43,58,85,.06),0 8px 20px rgba(43,58,85,.07);max-width:480px}
+.tab{border:0;border-radius:14px;background:transparent;min-height:46px;font-size:18px;font-weight:900;cursor:pointer}
+.tab.active{background:var(--sky-deep);color:#fff;box-shadow:0 3px 0 rgba(43,58,85,.12)}
+.pane[hidden]{display:none}
 .group{margin-top:26px}
 .group h2{display:flex;align-items:center;gap:10px;margin:0 0 12px 4px;font-size:18px;font-weight:800}
 .group h2 .gi{width:12px;height:12px;border-radius:4px;background:var(--sun)}
@@ -30,11 +43,121 @@ body{margin:0;min-height:100vh;font-family:"PingFang SC","HarmonyOS Sans SC","Hi
 .card .nm{font-size:20px;font-weight:900;margin-top:6px}
 .card .tag{position:absolute;top:12px;right:12px;font-size:11px;padding:3px 9px;border-radius:99px;background:var(--leaf-tint);color:#1f8a58;font-weight:800}
 .more{margin-top:30px;text-align:center;color:var(--ink-soft);font-size:14px;font-weight:600}
+.game-shell{margin-top:20px}
+.game-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 2px 14px}
+.game-top h2{margin:0;font-size:24px;line-height:1.15;font-weight:900}
+.game-top p{margin:5px 0 0;color:var(--ink-soft);font-size:14px;font-weight:700;line-height:1.45}
+.reset-game{border:0;border-radius:14px;background:#fff;box-shadow:var(--shadow);height:44px;padding:0 14px;font-size:14px;font-weight:900;cursor:pointer;flex:none}
+.game-cars{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.game-car{position:relative;border:0;background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:10px 8px 11px;min-height:126px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;overflow:hidden}
+.game-car.sel{outline:4px solid rgba(47,143,214,.28)}
+.game-car.locked{opacity:.52;filter:saturate(.65)}
+.game-car .toy{height:55px;width:100%;pointer-events:none}
+.game-car b{font-size:16px;line-height:1.2}
+.game-car small{font-size:11px;font-weight:800;color:var(--ink-soft)}
+.lock-badge{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:10px;background:rgba(43,58,85,.84);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900}
+.game-board{background:rgba(255,255,255,.76);border-radius:22px;padding:12px;box-shadow:var(--shadow)}
+.game-board-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.game-board-head h3{margin:0;font-size:22px;font-weight:900;line-height:1.18}
+.game-board-head p{margin:4px 0 0;font-size:14px;color:var(--ink-soft);font-weight:700;line-height:1.45}
+.stars{font-size:14px;font-weight:900;color:#E08E00;white-space:nowrap}
+.phasebar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.phase{border:0;border-radius:15px;background:#EEF4FF;color:#2F8FD6;min-height:46px;font-size:14px;font-weight:900;cursor:pointer}
+.phase.active{background:#2F8FD6;color:#fff}
+.phase:disabled{opacity:.45;cursor:default}
+.game-stage{min-height:430px}
+.game-car canvas.game-preview{height:64px;width:100%;display:block;border-radius:12px;background:linear-gradient(180deg,#A9D4FF,#D6ECFB 62%,#BFE3B0 62%);pointer-events:none}
+.game-note{margin:0 0 10px;font-size:16px;font-weight:900;color:var(--ink);line-height:1.45;background:#fff;border-radius:16px;padding:10px 12px;box-shadow:0 2px 0 rgba(43,58,85,.06)}
+.game-note b{color:#2F8FD6}
+.find-start{min-height:390px;border-radius:20px;background:linear-gradient(180deg,#A9D4FF 0%,#D6ECFB 58%,#BFE3B0 58%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;box-shadow:inset 0 0 0 3px rgba(255,255,255,.7)}
+.find-start-mark{width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#2F8FD6;color:#fff;font-size:42px;padding-left:5px;box-shadow:0 8px 0 rgba(43,58,85,.13),0 14px 24px rgba(43,58,85,.12);animation:pulseStart 1.5s ease-in-out infinite}
+.find-start-copy{margin:0;color:var(--ink);font-size:18px;font-weight:900}
+.find-start-btn{border:0;border-radius:18px;background:#4CC38A;color:#fff;min-height:60px;min-width:170px;padding:0 28px;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 6px 0 rgba(43,58,85,.14);font-size:22px;font-weight:900;cursor:pointer}
+.find-start-btn span:first-child{font-size:23px}
+.find-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}
+.machine-map{position:relative;min-height:300px;border-radius:18px;background:linear-gradient(180deg,#A9D4FF,#D6ECFB 58%,#BFE3B0 58%);overflow:hidden}
+.machine-map.model-map{min-height:340px;box-shadow:inset 0 0 0 3px rgba(255,255,255,.65)}
+.model-mount{position:absolute;inset:0;z-index:1}
+.game-3d-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.site-ground{position:absolute;left:-8%;right:-8%;bottom:-6%;height:45%;background:#CFE5B9;border-radius:50% 50% 0 0}
+.callout-line{position:absolute;z-index:2;height:3px;background:rgba(47,143,214,.62);border-radius:999px;transform-origin:0 50%;pointer-events:none;box-shadow:0 1px 0 rgba(255,255,255,.8)}
+.callout-line::before{content:"";position:absolute;left:-5px;top:-5px;width:8px;height:8px;border-radius:50%;background:#fff;border:3px solid #2F8FD6;box-shadow:0 2px 5px rgba(43,58,85,.15)}
+.find-map .callout-line{background:rgba(255,176,32,.72)}
+.find-map .callout-line::before{border-color:#FFB020}
+.assemble-map .callout-line{background:rgba(76,195,138,.72)}
+.assemble-map .callout-line::before{border-color:#4CC38A}
+.hotspot,.drop-zone{position:absolute;z-index:3;transform:translate(-50%,-50%);border:3px solid #fff;background:#FFB020;color:#fff;box-shadow:0 4px 0 rgba(43,58,85,.12),0 8px 18px rgba(43,58,85,.13);font-weight:900}
+.hotspot{width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer}
+.hotspot.target,.drop-zone.target{outline:4px solid rgba(255,176,32,.28)}
+.hotspot.target{background:#2F8FD6;animation:pulseTarget 1.1s ease-in-out infinite}
+.hotspot.waiting{opacity:.42}
+.hotspot.done{background:#4CC38A}
+.drop-zone{width:78px;min-height:44px;border-radius:15px;padding:5px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;line-height:1.2;background:rgba(255,255,255,.96);color:var(--ink);border-color:#FFB020}
+.drop-zone.target{border-color:#2F8FD6}
+.drop-zone.filled{background:#4CC38A;color:#fff;border-color:#fff}
+.drop-zone .piece{position:static!important;transform:none!important;margin:0;box-shadow:none;min-width:72px;min-height:38px;padding:4px 6px}
+.drop-zone .piece-preview{display:none}
+.part-list{display:flex;flex-direction:column;gap:8px}
+.part-row{display:flex;align-items:center;gap:9px;border-radius:15px;background:#fff;padding:9px 10px;box-shadow:0 2px 0 rgba(43,58,85,.06)}
+.part-dot{width:12px;height:12px;border-radius:50%;background:#D4DCE8;flex:none}
+.part-row.target{outline:3px solid rgba(47,143,214,.22)}
+.part-row.target .part-dot{background:#2F8FD6}
+.part-row.pending{opacity:.68}
+.part-row.done .part-dot{background:#4CC38A}
+.part-row b{font-size:15px}.part-row span{display:block;font-size:12px;color:var(--ink-soft);font-weight:700;line-height:1.35;margin-top:2px}
+.next-line{display:flex;justify-content:flex-end;margin-top:10px}
+.next-btn{border:0;border-radius:16px;background:#4CC38A;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.13);min-height:48px;padding:0 16px;font-size:16px;font-weight:900;cursor:pointer}
+.next-btn:disabled{opacity:.45;cursor:default}
+.assemble-wrap{display:grid;grid-template-columns:1fr;gap:12px}
+.assemble-map.model-map{min-height:460px}
+.parts-tray{display:flex;gap:8px;flex-wrap:wrap;min-height:94px;border-radius:16px;background:#FFF7E6;padding:10px}
+.parts-tray{gap:12px;min-height:154px;padding:14px;align-items:center}
+.piece{border:0;border-radius:18px;background:#fff;box-shadow:0 3px 0 rgba(43,58,85,.10),0 8px 16px rgba(43,58,85,.10);min-width:180px;min-height:128px;padding:10px;font-size:14px;font-weight:900;touch-action:none;cursor:grab;display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.piece-preview{width:150px;height:104px;display:block;flex:none;border-radius:12px;background:linear-gradient(180deg,#A9D4FF,#D6ECFB 62%,#BFE3B0 62%)}
+.piece.waiting{opacity:.45;cursor:default}
+.piece.dragging{cursor:grabbing;z-index:20;box-shadow:0 10px 28px rgba(43,58,85,.18)}
+.assemble-map .drop-zone{width:76px;min-height:64px;background:rgba(255,255,255,.16);border:3px dashed rgba(47,143,214,.68);border-radius:12px;color:transparent;box-shadow:none;touch-action:none}
+.assemble-map .drop-zone.target{background:rgba(255,176,32,.18);border-color:#FFB020;outline:2px solid rgba(255,176,32,.2);animation:pulseDrop 1.1s ease-in-out infinite}
+.assemble-map .drop-zone.filled{background:rgba(76,195,138,.2);border-color:#4CC38A}
+.assemble-map .drop-zone::before{content:'+';color:#2F8FD6;font-size:28px;font-weight:400;line-height:1}
+.assemble-map .drop-zone.filled::before{content:'✓';color:#4CC38A;font-size:24px}
+.assemble-guide-icon{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:#FFB020;color:#fff;font-size:28px;margin:auto;animation:pulseGuide 1.1s ease-in-out infinite}
+.assemble-guide-icon.done{background:#4CC38A;animation:none}
+.mission-wrap{display:grid;grid-template-columns:1fr;gap:10px}
+.mission-3d{position:relative;height:360px;border-radius:18px;background:linear-gradient(180deg,#A9D4FF 0%,#D6ECFB 56%,#BFE3B0 56%);overflow:hidden;box-shadow:inset 0 0 0 3px rgba(255,255,255,.65)}
+#missionCanvas{width:100%;height:300px;border-radius:18px;background:linear-gradient(180deg,#A9D4FF 0%,#D6ECFB 56%,#BFE3B0 56%);display:block;box-shadow:inset 0 0 0 3px rgba(255,255,255,.65)}
+.mission-steps{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.mission-step{border:0;border-radius:15px;background:#fff;box-shadow:0 3px 0 rgba(43,58,85,.08);min-height:52px;padding:6px 8px;font-size:14px;font-weight:900;cursor:pointer}
+.mission-step.done{background:#DDF7E9;color:#1f8a58}
+.mission-step.active{background:#FFB020;color:#fff}
+.mission-step:disabled{opacity:.58}
+.game-toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(120px);z-index:30;background:rgba(43,58,85,.92);color:#fff;border-radius:99px;padding:10px 16px;font-size:14px;font-weight:900;transition:transform .22s;max-width:86%;text-align:center}
+.game-toast.show{transform:translateX(-50%) translateY(0)}
+.toy{position:relative}
+.toy span{position:absolute;display:block}
+.toy .wheel{width:17px;height:17px;border-radius:50%;background:#2B3A55;border:4px solid #A8B3C4;bottom:4px}
+.toy .w1{left:22%}.toy .w2{right:22%}
+.toy-mixer .body{left:18%;right:18%;bottom:14px;height:20px;border-radius:8px;background:#E0563A}.toy-mixer .cab{right:17%;bottom:27px;width:29px;height:26px;border-radius:8px 8px 4px 4px;background:#F58D7B}.toy-mixer .drum{left:27%;bottom:29px;width:50px;height:32px;border-radius:50%;background:#F0EBE2;border:5px solid #8A929E;transform:rotate(-12deg)}
+.toy-pump .body{left:14%;right:15%;bottom:14px;height:19px;border-radius:8px;background:#F2B233}.toy-pump .cab{right:14%;bottom:27px;width:28px;height:25px;border-radius:8px 8px 4px 4px;background:#FFD56A}.toy-pump .arm{left:19%;bottom:43px;width:70px;height:7px;border-radius:7px;background:#E08E00;transform:rotate(-18deg);transform-origin:left center}.toy-pump .arm2{left:46%;bottom:54px;width:54px;height:7px;border-radius:7px;background:#F2B233;transform:rotate(26deg);transform-origin:left center}
+.toy-roller .body{left:35%;right:16%;bottom:20px;height:22px;border-radius:8px;background:#F2B233}.toy-roller .cab{right:23%;bottom:40px;width:26px;height:25px;border-radius:7px 7px 3px 3px;background:#3A4150}.toy-roller .drum{left:17%;bottom:5px;width:43px;height:43px;border-radius:50%;background:#B8BEC6;border:6px solid #6B7280}.toy-roller .wheel{right:20%;left:auto}
+.machine-svg{position:absolute;left:50%;top:52%;width:78%;max-width:330px;transform:translate(-50%,-50%)}
+.shake{animation:shake .18s linear 2}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes pulseTarget{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.08)}}
+@keyframes pulseStart{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes pulseDrop{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.06)}}
+@keyframes pulseGuide{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@media(max-width:620px){.game-cars{grid-template-columns:1fr}.game-car{min-height:104px;flex-direction:row;justify-content:flex-start;padding:10px 14px}.game-car canvas.game-preview{width:124px;height:76px;flex:none}.game-car .toy{width:118px;flex:none}.find-layout{grid-template-columns:1fr}.machine-map{min-height:285px}.machine-map.model-map{min-height:330px}.assemble-map.model-map{min-height:420px}.assemble-map .drop-zone{width:62px;min-height:54px;border-radius:10px}.assemble-map .drop-zone::before{font-size:24px}.assemble-map .drop-zone.filled::before{font-size:21px}.piece{min-width:154px;min-height:112px}.piece-preview{width:128px;height:90px}.game-stage{min-height:500px}.mission-3d{height:330px}.mission-steps{grid-template-columns:1fr}.game-top{align-items:flex-start}.phase{font-size:13px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="hero"><h1>它<em>怎么</em>动？</h1><p>点一个，看看它里面是怎么工作的</p></div>
+  <div class="tabs" role="tablist" aria-label="页面切换">
+    <button class="tab active" type="button" role="tab" aria-selected="true" data-home-tab="learn">科普</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" data-home-tab="game">游戏</button>
+  </div>
+  <section class="pane active" id="learnPane">
   <div class="group"><h2><span class="gi b"></span>交通工具 <small>带着我们去别的地方</small></h2>
     <div class="grid">
       <a class="card sky" href="pages/car.html" data-scene="car"><canvas></canvas><div class="nm">汽车</div></a>
@@ -46,9 +169,9 @@ body{margin:0;min-height:100vh;font-family:"PingFang SC","HarmonyOS Sans SC","Hi
       <a class="card sky" href="pages/forklift.html" data-scene="forklift"><canvas></canvas><div class="nm">叉车</div></a>
       <a class="card sky" href="pages/piler.html" data-scene="piler"><canvas></canvas><div class="nm">打桩机</div></a>
       <a class="card sky" href="pages/grader.html" data-scene="grader"><canvas></canvas><div class="nm">平地机</div></a>
-      <a class="card sky" href="pages/pumptruck.html" data-scene="pumptruck"><canvas></canvas><div class="nm">泵车</div></a>
+      <a class="card sky" href="pages/pumptruck.html" data-scene="pumptruck"><canvas></canvas><div class="nm">水泥泵车</div></a>
       <a class="card sky" href="pages/towercrane.html" data-scene="towercrane"><canvas></canvas><div class="nm">塔吊</div></a>
-      <a class="card sky" href="pages/dump.html" data-scene="dump"><canvas></canvas><div class="nm">自卸卡车</div></a>
+      <a class="card sky" href="pages/dump.html" data-scene="dump"><canvas></canvas><div class="nm">翻斗车</div></a>
       <a class="card sky" href="pages/loader.html" data-scene="loader"><canvas></canvas><div class="nm">装载机</div></a>
       <a class="card sky" href="pages/excavator.html" data-scene="excavator"><canvas></canvas><div class="nm">挖掘机</div></a>
       <a class="card sky" href="pages/dozer.html" data-scene="dozer"><canvas></canvas><div class="nm">推土机</div></a>
@@ -68,30 +191,55 @@ body{margin:0;min-height:100vh;font-family:"PingFang SC","HarmonyOS Sans SC","Hi
       <a class="card warm" href="pages/washer.html" data-scene="washer"><canvas></canvas><div class="nm">洗衣机</div></a>
     </div></div>
   <p class="more">更多东西正在做……</p>
+  </section>
+  <section class="pane" id="gamePane" hidden>
+    <div class="game-shell">
+      <div class="game-top">
+        <div><h2>工地小任务</h2><p id="gameIntro">先听零件，再拼回去，最后让车干活。</p></div>
+        <button class="reset-game" type="button" id="resetGame">重来</button>
+      </div>
+      <div class="game-cars" id="gameCars"></div>
+      <div class="game-board">
+        <div class="game-board-head">
+          <div><h3 id="gameTitle">搅拌车</h3><p id="gameHint">点亮所有零件。</p></div>
+          <div class="stars" id="gameStars"></div>
+        </div>
+        <div class="phasebar" role="tablist" aria-label="游戏步骤">
+          <button class="phase active" type="button" data-game-phase="find">1 找零件</button>
+          <button class="phase" type="button" data-game-phase="assemble">2 拼装</button>
+          <button class="phase" type="button" data-game-phase="mission">3 启动</button>
+        </div>
+        <div class="game-stage" id="gameStage"></div>
+      </div>
+    </div>
+  </section>
 </div>
-<script src="lib/three.min.js?v=1788493942"></script>
-<script src="js/lib3d.js?v=1788697758"></script>
-<script src="js/rig.js?v=1789107649"></script>
-<script src="scenes/dozer.js?v=1789107649"></script>
-<script src="scenes/crane.js?v=1789107649"></script>
-<script src="scenes/mixer.js?v=1789107805"></script>
-<script src="scenes/roller.js?v=1789107649"></script>
-<script src="scenes/loader.js?v=1789107649"></script>
-<script src="scenes/dump.js?v=1789107805"></script>
-<script src="scenes/firetruck.js?v=1789107805"></script>
-<script src="scenes/garbage.js?v=1789107805"></script>
-<script src="scenes/towercrane.js?v=1789107649"></script>
-<script src="scenes/pumptruck.js?v=1789107805"></script>
-<script src="scenes/grader.js?v=1789107649"></script>
-<script src="scenes/piler.js?v=1789107649"></script>
-<script src="scenes/forklift.js?v=1789107649"></script>
-<script src="scenes/sweeper.js?v=1789107805"></script>
-<script src="scenes/towtruck.js?v=1789107805"></script>
-<script src="scenes/car.js?v=1788766718"></script>
-<script src="scenes/washer.js?v=1788972096"></script>
-<script src="scenes/elevator.js?v=1789107649"></script>
-<script src="scenes/excavator.js?v=1789002420"></script>
-<script src="scenes/jet.js?v=1788972096"></script>
-<script src="js/home.js?v=1788924512"></script>
+<script src="lib/three.min.js?v=1789106790"></script>
+<script src="js/lib3d.js?v=1789113045"></script>
+<script src="js/rig.js?v=1789114142"></script>
+<script src="scenes/dozer.js?v=1789112709"></script>
+<script src="scenes/crane.js?v=1789112709"></script>
+<script src="scenes/mixer.js?v=1789112709"></script>
+<script src="scenes/roller.js?v=1789112709"></script>
+<script src="scenes/loader.js?v=1789114142"></script>
+<script src="scenes/dump.js?v=1789114142"></script>
+<script src="scenes/firetruck.js?v=1789112709"></script>
+<script src="scenes/garbage.js?v=1789112709"></script>
+<script src="scenes/towercrane.js?v=1789112709"></script>
+<script src="scenes/pumptruck.js?v=1789114142"></script>
+<script src="scenes/grader.js?v=1789112709"></script>
+<script src="scenes/piler.js?v=1789112709"></script>
+<script src="scenes/forklift.js?v=1789112709"></script>
+<script src="scenes/sweeper.js?v=1789112709"></script>
+<script src="scenes/towtruck.js?v=1789112709"></script>
+<script src="scenes/car.js?v=1789106790"></script>
+<script src="scenes/washer.js?v=1789106790"></script>
+<script src="scenes/elevator.js?v=1789112709"></script>
+<script src="scenes/excavator.js?v=1789106790"></script>
+<script src="scenes/jet.js?v=1789106790"></script>
+<script src="js/home.js?v=1789106790"></script>
+<script src="voice/lines.js?v=1789115239"></script>
+<script src="js/game.js?v=1789117600"></script>
+<script src="js/pwa.js?v=1789114121"></script>
 </body>
 </html>

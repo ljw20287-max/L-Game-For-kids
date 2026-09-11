@@ -1,0 +1,51 @@
+{
+  "name": "它怎么动？",
+  "short_name": "它怎么动",
+  "description": "给 3-6 岁孩子看的 3D 机器科普应用。",
+  "lang": "zh-CN",
+  "id": "./",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FFF6E5",
+  "theme_color": "#2F8FD6",
+  "categories": ["education", "games", "kids"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "汽车",
+      "short_name": "汽车",
+      "url": "pages/car.html"
+    },
+    {
+      "name": "挖掘机",
+      "short_name": "挖掘机",
+      "url": "pages/excavator.html"
+    },
+    {
+      "name": "洗衣机",
+      "short_name": "洗衣机",
+      "url": "pages/washer.html"
+    }
+  ]
+}

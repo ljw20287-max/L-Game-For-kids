@@ -22,7 +22,7 @@ print(f'{len(lines)} lines')
 
 sem = asyncio.Semaphore(4)
 async def gen(text, voice, path):
-    if path.exists() and path.stat().st_size > 0:
+    if path.exists() and path.stat().st_size >= 1500:
         return 'skip'
     async with sem:
         for attempt in range(3):
